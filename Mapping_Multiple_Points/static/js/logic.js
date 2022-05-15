@@ -1,3 +1,8 @@
+// NTS: LEFT OFF 13.4.2 BIND A POPUP TO THE MARKER 
+  //COMMIT CONTENT BEFORE THIS POINT 
+
+
+
 // boilerplate code
 
 // console log test
@@ -8,31 +13,27 @@ console.log("working");
 // Create the map object with a center and zoom level.
 let map = L.map("mapid", {
     center: [
-      51.5, -0.09
+      39.0, -98.0
     ],
-    zoom: 12
+    zoom: 5
   });
 
+//13.4.2
+  // add multiple markers 
+  // loop thru array 
 
-//single marker
-// var marker = L.marker([51.5, -0.09]).addTo(map);
+//get data for array
+  //need script src in index.html 
+let cityData = cities;
 
-// circle
- var circle = L.circle([51.5073, -0.1657], {
-    color: 'green',
-    fillColor: '#29D837',
-    fillOpacity: 0.5,
-    radius: 500
-}).addTo(map);
+//loop
 
-// circle marker radius in pixels
-// var circleMarker = L.circleMarker([51.5073, -0.1657], {
-//     radius: 30,
-//     color: "green",
-//     fillColor : "#29D837"
-// }).addTo(map);
+cityData.forEach(function(city){
+  console.log(city)
+  L.marker(city.location).addTo(map);
+});
 
-// tile layer method 1 https://leafletjs.com/examples/quick-start/
+// tile layer  https://leafletjs.com/examples/quick-start/
 
 let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -43,5 +44,5 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/
     accessToken: API_KEY
 });
 
-//then add 
+//then add tile layer  
 streets.addTo(map);
