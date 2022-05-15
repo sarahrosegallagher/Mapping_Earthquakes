@@ -1,7 +1,3 @@
-// NTS: LEFT OFF 13.4.2 BIND A POPUP TO THE MARKER 
-  //COMMIT CONTENT BEFORE THIS POINT 
-
-
 
 // boilerplate code
 
@@ -26,11 +22,26 @@ let map = L.map("mapid", {
   //need script src in index.html 
 let cityData = cities;
 
-//loop
+//loop, use L.marker(), .bindPopup() method [toLocaleString() method for population format], .addTo(map)
 
+// cityData.forEach(function(city){
+//   console.log(city)
+//   L.marker(city.location)
+//   .bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3> Population " + city.population.toLocaleString() + "</h3>")
+//   .addTo(map);
+// });
+
+// same as above w circle based on pop
 cityData.forEach(function(city){
   console.log(city)
-  L.marker(city.location).addTo(map);
+  L.circleMarker(city.location, {
+    radius: city.population/200000,
+    color: "orange",
+    fillColor: "#EE8E1B",
+    lineWeight: 4
+  })
+  .bindPopup("<h2>" + city.city + ", " + city.state + "</h2> <hr> <h3> Population " + city.population.toLocaleString() + "</h3>")
+  .addTo(map);
 });
 
 // tile layer  https://leafletjs.com/examples/quick-start/
