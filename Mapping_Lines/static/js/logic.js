@@ -1,4 +1,3 @@
-// NTS: RESUME AT SKILL DRILL 13.4.3
 
 //  mapbox ids:
     // mapbox/streets-v11
@@ -12,7 +11,6 @@
 console.log("working");
 
 
-// map method 2
 // Create the map object with a center and zoom level.
 let map = L.map("mapid", {
     center: [
