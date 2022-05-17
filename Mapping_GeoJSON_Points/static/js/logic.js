@@ -1,4 +1,5 @@
-// NTS: RESUME AT SKILL DRILL 13.4.3
+// intellisense path
+/// <reference path = "../../typings/index.d.ts" />
 
 //  mapbox ids:
     // mapbox/streets-v11
@@ -48,7 +49,7 @@ let sanFranAirport =
 L.geoJSON(sanFranAirport, {
   onEachFeature: function(feature, layer){
     console.log(layer);
-    layer.bindPopup();
+    layer.bindPopup("<h2>Airport Code: "+feature.properties.faa +"</h2> <hr> <h3>Airport Name: " + feature.properties.name + "</h3>");
   }
 }).addTo(map);
 
