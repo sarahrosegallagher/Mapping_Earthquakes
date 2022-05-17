@@ -53,7 +53,7 @@ function styleInfo(feature){
   return {
     opacity: 1,
     fillOpacity: 0.7,
-    fillColor: "#EAB623",
+    fillColor: getColor(feature.properties.mag),
     color: "#00000",
     radius: getRadius(feature.properties.mag),
     stroke: true,
@@ -68,6 +68,25 @@ function getRadius(magnitude){
   return magnitude * 4;
 }
 
+function getColor(magnitude){
+  if (magnitude > 5){
+    return "#ea2c2c";
+  }
+  if (magnitude > 4){
+    return "#ea822c";
+  }
+  if (magnitude > 3){
+    return "#ee9c00";
+  }  
+  if (magnitude > 2){
+    return "#eecc00";
+  }
+  if (magnitude > 1){
+    return "#d4ee00";
+  }
+  return "#98ee00"
+}
+
 // d3.json method w .then() promise and anon function()
 d3.json(earthquakes7Days).then(function(data){
   // geojson leaf
@@ -79,7 +98,10 @@ d3.json(earthquakes7Days).then(function(data){
     },
     // style
     style: styleInfo,
-    
-  })
-.addTo(map);
+    // bindPopup on each
+    onEachFeature: function(feature, layer){
+    layer.bindPopup("Magnitude: "+ feature.properties.mag + "<br>Location: " 
+    + feature.properties.place);
+    }
+  }).addTo(map);
 });
