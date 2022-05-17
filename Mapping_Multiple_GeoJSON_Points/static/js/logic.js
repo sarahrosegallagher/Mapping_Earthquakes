@@ -10,33 +10,38 @@
     // mapbox/satellite-streets-v11
     //  mapbox/navigation-preview-night-v2
 
-// console log test
-console.log("working");
 
-
-// map method 2
-// Create the map object with a center and zoom level.
-let map = L.map("mapid", {
-    center: [
-      30,30
-        ],
-    zoom: 2
-  });
-
-
-// tile layer variable https://leafletjs.com/examples/quick-start/
-
-let tile = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-preview-night-v2/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+// streets tile
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
-    id: 'mapbox/navigation-preview-night-v2',
-    tileSize: 512,
-    zoomOffset: -1,
     accessToken: API_KEY
 });
 
-//then add tile layer  
-tile.addTo(map);
+//dark tile
+let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+    maxZoom: 18,
+    accessToken: API_KEY
+});
+
+//base layer w both tiles
+let baseMaps = {
+  Streets: streets,
+  Dark: dark
+};
+
+//map 
+let map = L.map("mapid", {
+  center: [
+    30,30
+      ],
+  zoom: 2.2,
+  layers: [streets]
+});
+
+// layers into layers control, add control to map
+L.control.layers(baseMaps).addTo(map);
 
 // Add GeoJSON data url access
   // after tileLayer() bcs map load before large data added 
