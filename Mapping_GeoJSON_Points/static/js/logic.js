@@ -7,6 +7,7 @@
     // mapbox/dark-v10
     // mapbox/satellite-v9
     // mapbox/satellite-streets-v11
+    //  mapbox/navigation-preview-night-v2
 
 // console log test
 console.log("working");
@@ -16,33 +17,59 @@ console.log("working");
 // Create the map object with a center and zoom level.
 let map = L.map("mapid", {
     center: [
-      37.6213, -95
+      37.6, -122.4
         ],
-    zoom: 5
+    zoom: 12
   });
 
-// Coordinates for each point to be used in the line.
-let line = [
-  [33.9416, -118.4085],
-  [30.283910,-97.704840],
-  [43.680706,-79.6115899],
-  [40.64357,-73.78203]
-];
+// Add GeoJSON data.
+let sanFranAirport =
+{"type":"FeatureCollection","features":[{
+    "type":"Feature",
 
-// Create a polyline using the line coordinates and make the line red.
-L.polyline(line, {
-  color: "blue",
-  dashArray: "10, 10",
-  opacity: "0.5",
-  weight: "4"
+    "properties":{
+        "id":"3469",
+        "name":"San Francisco International Airport",
+        "city":"San Francisco",
+        "country":"United States",
+        "faa":"SFO",
+        "icao":"KSFO",
+        "alt":"13",
+        "tz-offset":"-8",
+        "dst":"A",
+        "tz":"America/Los_Angeles"},
+
+        "geometry":{
+            "type":"Point",
+            "coordinates":[-122.375,37.61899948120117]}}
+]};
+
+// call back fxn: on each feature
+L.geoJSON(sanFranAirport, {
+  onEachFeature: function(feature, layer){
+    console.log(layer);
+    layer.bindPopup();
+  }
 }).addTo(map);
+
+// call back fxn: point to layer
+// L.geoJSON(sanFranAirport,{
+//   // pointToLayer method to add each feature into marker
+//   // chain bindPopup()
+//   pointToLayer: function(feature, latlng){
+//     // log for testing 
+//     console.log(feature);
+//     return L.marker(latlng)
+//     .bindPopup("<h2>"+feature.properties.city +"</h2>");
+//   }
+// }).addTo(map);
 
 // tile layer  https://leafletjs.com/examples/quick-start/
 
-let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-preview-night-v2/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
-    id: 'mapbox/light-v10',
+    id: 'mapbox/navigation-preview-night-v2',
     tileSize: 512,
     zoomOffset: -1,
     accessToken: API_KEY
