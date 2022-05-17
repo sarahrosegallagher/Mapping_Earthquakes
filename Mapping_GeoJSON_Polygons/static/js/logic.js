@@ -13,14 +13,14 @@
 
 
 // streets tile
-let light = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-preview-day-v2/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
 });
 
 //dark tile
-let dark = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-preview-night-v2/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let satelliteStreets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}', {
 attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     accessToken: API_KEY
@@ -28,17 +28,17 @@ attribution: 'Map data © <a href="https://www.openstreetmap.org/">OpenStreetMap
 
 //base layer w both tiles
 let baseMaps = {
-  Light: light,
-  Dark: dark
+  "Streets": streets,
+  "Satellite Streets": satelliteStreets
 };
 
 //map 
 let map = L.map("mapid", {
   center: [
-    44, -80
+    43.7, -79.3
       ],
-  zoom: 3,
-  layers: [light]
+  zoom: 11,
+  layers: [streets]
 });
 
 // layers into layers control, add control to map
@@ -46,16 +46,17 @@ L.control.layers(baseMaps).addTo(map);
 
 // Add GeoJSON data url access
   // after tileLayer() bcs map load before large data added 
-let torontoRoutes = "https://raw.githubusercontent.com/sarahrosegallagher/Mapping_Eartquakes/main/torontoRoutes.json";
+let torontoHoods = "https://raw.githubusercontent.com/sarahrosegallagher/Mapping_Eartquakes/main/torontoNeighborhoods.json";
 
 // style for lines
 let myStyle = {
-  color: "#873FDE",
-  weight: 2
+  color: "#3F5EDE",
+  fillColor: "#EAE223",
+  weight: 1
 };
 
 // d3.json method w .then() promise and anon function()
-d3.json(torontoRoutes).then(function(data){
+d3.json(torontoHoods).then(function(data){
   console.log(data);
   // geoJSON layer w data
   L.geoJSON(data,{
@@ -63,9 +64,7 @@ d3.json(torontoRoutes).then(function(data){
     style: myStyle,
     // nested on each feature for bindPopup
     onEachFeature: function(feature, layer){
-      layer.bindPopup("<h2>Airline: "+feature.properties.airline +"</h2> <hr> <h3>Destination: " 
-      + feature.properties.dst + "</h3>");
-    }
-})
+      layer.bindPopup("<h2>Neighborhood: " +feature.properties.AREA_NAME + "</h3>");
+}})
 .addTo(map);
 });
