@@ -18,56 +18,15 @@ console.log("working");
 // Create the map object with a center and zoom level.
 let map = L.map("mapid", {
     center: [
-      37.6, -122.4
+      30,30
         ],
-    zoom: 12
+    zoom: 2
   });
 
-// Add GeoJSON data.
-let sanFranAirport =
-{"type":"FeatureCollection","features":[{
-    "type":"Feature",
 
-    "properties":{
-        "id":"3469",
-        "name":"San Francisco International Airport",
-        "city":"San Francisco",
-        "country":"United States",
-        "faa":"SFO",
-        "icao":"KSFO",
-        "alt":"13",
-        "tz-offset":"-8",
-        "dst":"A",
-        "tz":"America/Los_Angeles"},
+// tile layer variable https://leafletjs.com/examples/quick-start/
 
-        "geometry":{
-            "type":"Point",
-            "coordinates":[-122.375,37.61899948120117]}}
-]};
-
-// call back fxn: on each feature
-L.geoJSON(sanFranAirport, {
-  onEachFeature: function(feature, layer){
-    console.log(layer);
-    layer.bindPopup("<h2>Airport Code: "+feature.properties.faa +"</h2> <hr> <h3>Airport Name: " + feature.properties.name + "</h3>");
-  }
-}).addTo(map);
-
-// call back fxn: point to layer
-// L.geoJSON(sanFranAirport,{
-//   // pointToLayer method to add each feature into marker
-//   // chain bindPopup()
-//   pointToLayer: function(feature, latlng){
-//     // log for testing 
-//     console.log(feature);
-//     return L.marker(latlng)
-//     .bindPopup("<h2>"+feature.properties.city +"</h2>");
-//   }
-// }).addTo(map);
-
-// tile layer  https://leafletjs.com/examples/quick-start/
-
-let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-preview-night-v2/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+let tile = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-preview-night-v2/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
     maxZoom: 18,
     id: 'mapbox/navigation-preview-night-v2',
@@ -77,4 +36,21 @@ let streets = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/navigation-pr
 });
 
 //then add tile layer  
-streets.addTo(map);
+tile.addTo(map);
+
+// Add GeoJSON data url access
+  // after tileLayer() bcs map load before large data added 
+let airportData = "https://raw.githubusercontent.com/sarahrosegallagher/Mapping_Eartquakes/main/majorAirports.json";
+
+// d3.json method w .then() promise and anon function()
+d3.json(airportData).then(function(data){
+  console.log(data);
+  // geoJSON layer w data
+  L.geoJSON(data,{
+    // nested on each feature for bindPopup
+    onEachFeature: function(feature, layer){
+      layer.bindPopup("<h2>Airport Code: "+feature.properties.faa +"</h2> <hr> <h3>Airport Name: " 
+      + feature.properties.name + "</h3>");
+    }
+  }).addTo(map);
+});

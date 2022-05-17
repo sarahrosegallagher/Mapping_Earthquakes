@@ -49,7 +49,8 @@ let sanFranAirport =
 L.geoJSON(sanFranAirport, {
   onEachFeature: function(feature, layer){
     console.log(layer);
-    layer.bindPopup("<h2>Airport Code: "+feature.properties.faa +"</h2> <hr> <h3>Airport Name: " + feature.properties.name + "</h3>");
+    layer.bindPopup("<h2>Airport Code: "+feature.properties.faa +"</h2> <hr> <h3>Airport Name: " 
+    + feature.properties.name + "</h3>");
   }
 }).addTo(map);
 
